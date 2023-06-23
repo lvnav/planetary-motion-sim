@@ -19,14 +19,12 @@ function main() {
     y: (canvas.height = body.clientHeight),
   };
 
-  const context = init(canvas, canvasDimensions);
+  const context = initCanvas(canvas, canvasDimensions);
 
-  const renderingTimer = 0;
-
-  loop(context, renderingTimer, canvasDimensions);
+  loop(context, 0, canvasDimensions);
 }
 
-function init(
+function initCanvas(
   canvas: HTMLCanvasElement,
   { x: width, y: height }: Coords
 ): CanvasRenderingContext2D {
@@ -46,17 +44,16 @@ function init(
 
 function loop(
   context: CanvasRenderingContext2D,
-  renderingTimer: number,
+  loopIterator: number,
   canvasDimensions: Coords
 ): void {
-  const radius = 50;
-  renderingTimer += sinPeriod();
+  loopIterator += sinPeriod();
 
   clearCanvas(context, canvasDimensions);
 
-  runPythagoreanModel({ context, renderingTimer, radius });
+  runPythagoreanModel({ context, loopIterator });
 
-  requestAnimationFrame(() => loop(context, renderingTimer, canvasDimensions));
+  requestAnimationFrame(() => loop(context, loopIterator, canvasDimensions));
 }
 
 function drawPlanet({
@@ -114,12 +111,10 @@ function drawDisk({
 
 function runPythagoreanModel({
   context,
-  renderingTimer,
-  radius,
+  loopIterator,
 }: {
   context: CanvasRenderingContext2D;
-  renderingTimer: number;
-  radius: number;
+  loopIterator: number;
 }): void {
   drawDisk({
     context,
@@ -130,19 +125,19 @@ function runPythagoreanModel({
 
   drawPlanet({
     context,
-    radius,
+    radius: 50,
     orbitalRadius: 300,
     color: "red",
-    time: renderingTimer / 60 / 60,
+    time: loopIterator / 60 / 60,
     withOrbitCounter: true,
   });
 
   drawPlanet({
     context,
-    radius: radius * 2,
+    radius: 100,
     orbitalRadius: 500,
     color: "yellow",
-    time: renderingTimer / 60 / 60,
+    time: loopIterator / 60 / 60,
     withOrbitCounter: true,
   });
 }
