@@ -1,5 +1,5 @@
-import { degToRad } from "./helpers";
 import { clearCanvas } from "./helpers/draw";
+import { degToRad, sinPeriod } from "./helpers/math";
 import { Coords } from "./interfaces/coords";
 
 function main() {
@@ -50,7 +50,7 @@ function loop(
   canvasDimensions: Coords
 ): void {
   const radius = 50;
-  renderingTimer += Math.PI * 2; // sin() period
+  renderingTimer += sinPeriod();
 
   clearCanvas(context, canvasDimensions);
 
@@ -65,19 +65,20 @@ function drawPlanet({
   orbitalRadius,
   time,
   color,
-  orbitCounter,
+  withOrbitCounter,
 }: {
   context: CanvasRenderingContext2D;
   radius: number;
   orbitalRadius: number;
   time: number;
   color: string;
-  orbitCounter?: number;
+  withOrbitCounter?: boolean;
 }) {
   const coords = {
     x: Math.cos(time) * orbitalRadius,
     y: Math.sin(time) * orbitalRadius,
   };
+  const orbitCounter = Math.trunc(time / sinPeriod());
 
   drawDisk({
     context,
@@ -86,10 +87,10 @@ function drawPlanet({
     color,
   });
 
-  if (orbitCounter !== undefined) {
-    context.font = "48px serif";
+  if (withOrbitCounter === true) {
+    context.font = "24px serif";
     context.fillStyle = "black";
-    context.fillText(`${orbitCounter} orbit(s)`, coords.x + 100, coords.y);
+    context.fillText(`${orbitCounter} orbit(s)`, coords.x, coords.y);
   }
 }
 
@@ -132,19 +133,17 @@ function runPythagoreanModel({
     radius,
     orbitalRadius: 300,
     color: "red",
-    time: renderingTimer / 60,
-    orbitCounter: Math.round(renderingTimer / 60 / (2 * Math.PI)),
+    time: renderingTimer / 60 / 60,
+    withOrbitCounter: true,
   });
 
-  // console.log(renderingTimer / (Math.PI * 2));
-
-  // drawPlanet({
-  //   context,
-  //   radius: radius * 2,
-  //   orbitalRadius: 500,
-  //   color: "yellow",
-  //   time: renderingTimer / 60 / 60,
-  //   orbitCounter: 0,
-  // });
+  drawPlanet({
+    context,
+    radius: radius * 2,
+    orbitalRadius: 500,
+    color: "yellow",
+    time: renderingTimer / 60 / 60,
+    withOrbitCounter: true,
+  });
 }
 main();
