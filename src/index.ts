@@ -1,5 +1,6 @@
 import { clearCanvas } from "./helpers/draw";
 import { degToRad, sinPeriod } from "./helpers/math";
+import { pluralize } from "./helpers/string";
 import { Coords } from "./interfaces/coords";
 
 function main() {
@@ -50,9 +51,7 @@ function loop(
   loopIterator += sinPeriod();
 
   clearCanvas(context, canvasDimensions);
-
   runPythagoreanModel({ context, loopIterator });
-
   requestAnimationFrame(() => loop(context, loopIterator, canvasDimensions));
 }
 
@@ -87,7 +86,11 @@ function drawPlanet({
   if (withOrbitCounter === true) {
     context.font = "24px serif";
     context.fillStyle = "black";
-    context.fillText(`${orbitCounter} orbit(s)`, coords.x, coords.y);
+    context.fillText(
+      `${orbitCounter} ${pluralize("orbit", orbitCounter)}`,
+      coords.x,
+      coords.y
+    );
   }
 }
 
@@ -126,7 +129,7 @@ function runPythagoreanModel({
   drawPlanet({
     context,
     radius: 50,
-    orbitalRadius: 300,
+    orbitalRadius: 200,
     color: "red",
     time: loopIterator / 60 / 60,
     withOrbitCounter: true,
@@ -135,10 +138,11 @@ function runPythagoreanModel({
   drawPlanet({
     context,
     radius: 100,
-    orbitalRadius: 500,
+    orbitalRadius: 400,
     color: "yellow",
     time: loopIterator / 60 / 60,
     withOrbitCounter: true,
   });
 }
+
 main();
