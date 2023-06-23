@@ -1,12 +1,6 @@
-type Coords = {
-  x: number;
-  y: number;
-};
-
-type CanvasDimensions = {
-  width: number;
-  height: number;
-};
+import { degToRad } from "./helpers";
+import { clearCanvas } from "./helpers/draw";
+import { Coords } from "./interfaces/coords";
 
 function main() {
   const canvas = document.querySelector("canvas");
@@ -16,9 +10,13 @@ function main() {
     throw new Error("canvas is null !");
   }
 
-  const canvasDimensions: CanvasDimensions = {
-    width: (canvas.width = body.clientWidth),
-    height: (canvas.height = body.clientHeight),
+  if (body === null) {
+    throw new Error("body is null !");
+  }
+
+  const canvasDimensions: Coords = {
+    x: (canvas.width = body.clientWidth),
+    y: (canvas.height = body.clientHeight),
   };
 
   const context = init(canvas, canvasDimensions);
@@ -28,30 +26,9 @@ function main() {
   loop(context, renderingTimer, canvasDimensions);
 }
 
-function loop(
-  context: CanvasRenderingContext2D,
-  renderingTimer: number,
-  canvasDimensions: CanvasDimensions
-): void {
-  const radius = 50;
-  renderingTimer += 0.01;
-
-  clearCanvas(context, canvasDimensions);
-
-  buildPlanet({
-    context,
-    radius,
-    orbitalRadius: 300,
-    color: "red",
-    time: renderingTimer,
-  });
-
-  requestAnimationFrame(() => loop(context, renderingTimer, canvasDimensions));
-}
-
 function init(
   canvas: HTMLCanvasElement,
-  { width, height }: CanvasDimensions
+  { x: width, y: height }: Coords
 ): CanvasRenderingContext2D {
   const context = canvas.getContext("2d");
 
@@ -67,45 +44,107 @@ function init(
   return context;
 }
 
-function degToRad(degrees: number): number {
-  return (degrees * Math.PI) / 180;
-}
-
-function clearCanvas(
+function loop(
   context: CanvasRenderingContext2D,
-  canvasDimensions: CanvasDimensions
+  renderingTimer: number,
+  canvasDimensions: Coords
 ): void {
-  context.save();
-  context.setTransform(1, 0, 0, 1, 0, 0);
-  context.clearRect(0, 0, canvasDimensions.width, canvasDimensions.height);
-  context.fillStyle = "#2B2A33";
-  context.fillRect(0, 0, canvasDimensions.width, canvasDimensions.height);
-  context.restore();
+  const radius = 50;
+  renderingTimer += Math.PI * 2; // sin() period
+
+  clearCanvas(context, canvasDimensions);
+
+  runPythagoreanModel({ context, renderingTimer, radius });
+
+  requestAnimationFrame(() => loop(context, renderingTimer, canvasDimensions));
 }
 
-function buildPlanet({
+function drawPlanet({
   context,
   radius,
   orbitalRadius,
   time,
   color,
+  orbitCounter,
 }: {
   context: CanvasRenderingContext2D;
   radius: number;
   orbitalRadius: number;
   time: number;
   color: string;
+  orbitCounter?: number;
+}) {
+  const coords = {
+    x: Math.cos(time) * orbitalRadius,
+    y: Math.sin(time) * orbitalRadius,
+  };
+
+  drawDisk({
+    context,
+    radius,
+    coords,
+    color,
+  });
+
+  if (orbitCounter !== undefined) {
+    context.font = "48px serif";
+    context.fillStyle = "black";
+    context.fillText(`${orbitCounter} orbit(s)`, coords.x + 100, coords.y);
+  }
+}
+
+function drawDisk({
+  context,
+  radius,
+  coords: { x, y },
+  color,
+}: {
+  context: CanvasRenderingContext2D;
+  radius: number;
+  coords: Coords;
+  color: string;
 }) {
   context.fillStyle = color;
   context.beginPath();
-  context.arc(
-    Math.cos(time) * orbitalRadius,
-    Math.sin(time) * orbitalRadius,
-    radius,
-    degToRad(0),
-    degToRad(360)
-  );
+  context.arc(x, y, radius, degToRad(0), degToRad(360));
   context.fill();
   context.closePath();
+}
+
+function runPythagoreanModel({
+  context,
+  renderingTimer,
+  radius,
+}: {
+  context: CanvasRenderingContext2D;
+  renderingTimer: number;
+  radius: number;
+}): void {
+  drawDisk({
+    context,
+    color: "red",
+    radius: 10,
+    coords: { x: 0, y: 0 },
+  });
+
+  drawPlanet({
+    context,
+    radius,
+    orbitalRadius: 300,
+    color: "red",
+    time: renderingTimer / 60,
+    orbitCounter: Math.round(renderingTimer / 60 / (2 * Math.PI)),
+  });
+
+  // console.log(renderingTimer / (Math.PI * 2));
+
+  // drawPlanet({
+  //   context,
+  //   radius: radius * 2,
+  //   orbitalRadius: 500,
+  //   color: "yellow",
+  //   time: renderingTimer / 60 / 60,
+  //   orbitCounter: 0,
+  // });
 }
 main();
