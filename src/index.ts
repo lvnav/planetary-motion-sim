@@ -4,15 +4,15 @@ import { pluralize } from "./helpers/string";
 import { Coords } from "./interfaces/coords";
 
 function main() {
-  const canvas = document.querySelector("canvas");
   const body = document.querySelector("body");
-
-  if (canvas === null) {
-    throw new Error("canvas is null !");
-  }
+  const canvas = document.querySelector("canvas");
 
   if (body === null) {
     throw new Error("body is null !");
+  }
+
+  if (canvas === null) {
+    throw new Error("canvas is null !");
   }
 
   const canvasDimensions: Coords = {
@@ -20,9 +20,7 @@ function main() {
     y: (canvas.height = body.clientHeight),
   };
 
-  const context = initCanvas(canvas, canvasDimensions);
-
-  loop(context, 0, canvasDimensions);
+  loop(initCanvas(canvas, canvasDimensions), 0, canvasDimensions);
 }
 
 function initCanvas(
@@ -125,24 +123,66 @@ function runPythagoreanModel({
     radius: 10,
     coords: { x: 0, y: 0 },
   });
+  const planets = [
+    {
+      context,
+      radius: 5,
+      orbitalRadius: 100,
+      color: "red",
+      time: loopIterator / 60 / 60,
+      withOrbitCounter: true,
+    },
+    {
+      context,
+      radius: 10,
+      orbitalRadius: 150,
+      color: "red",
+      time: loopIterator / 60 / 60 / 2,
+      withOrbitCounter: true,
+    },
+    {
+      context,
+      radius: 15,
+      orbitalRadius: 200,
+      color: "red",
+      time: loopIterator / 60 / 60 / 3,
+      withOrbitCounter: true,
+    },
+    {
+      context,
+      radius: 20,
+      orbitalRadius: 250,
+      color: "red",
+      time: loopIterator / 60 / 60 / 4,
+      withOrbitCounter: true,
+    },
+    {
+      context,
+      radius: 25,
+      orbitalRadius: 300,
+      color: "red",
+      time: loopIterator / 60 / 60 / 5,
+      withOrbitCounter: true,
+    },
+    {
+      context,
+      radius: 30,
+      orbitalRadius: 350,
+      color: "red",
+      time: loopIterator / 60 / 60 / 6,
+      withOrbitCounter: true,
+    },
+    {
+      context,
+      radius: 35,
+      orbitalRadius: 400,
+      color: "red",
+      time: loopIterator / 60 / 60 / 7,
+      withOrbitCounter: true,
+    },
+  ];
 
-  drawPlanet({
-    context,
-    radius: 50,
-    orbitalRadius: 200,
-    color: "red",
-    time: loopIterator / 60 / 60,
-    withOrbitCounter: true,
-  });
-
-  drawPlanet({
-    context,
-    radius: 100,
-    orbitalRadius: 400,
-    color: "yellow",
-    time: loopIterator / 60 / 60,
-    withOrbitCounter: true,
-  });
+  planets.map((planet) => drawPlanet(planet));
 }
 
 main();
