@@ -13,7 +13,7 @@ import {
 } from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
-import { auToPixels, degToRad, sinPeriod } from "./helpers/math";
+import { auToPixels, sinPeriod } from "./helpers/math";
 
 const distanceDivider = 20;
 const scaleFactor = 50;
@@ -128,20 +128,18 @@ async function init() {
         console.log("cc");
 
         const material = new LineBasicMaterial({ color: 0x0000ff });
-        const geometry = new BufferGeometry()
-          .setFromPoints(
-            new Path()
-              .absarc(
-                0,
-                0,
-                auToPixels(distanceFromSun) / distanceDivider,
-                0,
-                Math.PI * 2,
-                false
-              )
-              .getSpacedPoints(50)
-          )
-          .rotateX(degToRad(45));
+        const geometry = new BufferGeometry().setFromPoints(
+          new Path()
+            .absarc(
+              0,
+              0,
+              auToPixels(distanceFromSun) / distanceDivider,
+              0,
+              Math.PI * 2,
+              false
+            )
+            .getSpacedPoints(50)
+        );
 
         scene.add(new LineLoop(geometry, material));
       }
@@ -167,6 +165,7 @@ async function loop({
   celestialMeshes: Promise<Object3D>[];
 }) {
   iterator += sinPeriod();
+
   celestialMeshes.forEach(async (celestialMesh, key) => {
     const { userData, position } = await celestialMesh;
     if (userData.rotate !== false) {
@@ -174,7 +173,7 @@ async function loop({
         (Math.cos(iterator / 60 / 60 / key) *
           auToPixels(userData.distanceFromSun)) /
         distanceDivider;
-      position.z =
+      position.y =
         (Math.sin(iterator / 60 / 60 / key) *
           auToPixels(userData.distanceFromSun)) /
         distanceDivider;
@@ -212,8 +211,7 @@ function initCanvas(): {
     1,
     1000000
   );
-  camera.position.y = 150;
-  camera.rotation.x = degToRad(45);
+  camera.position.z = 150;
 
   const hlight = new AmbientLight(0x404040, 10);
   scene.add(hlight);
