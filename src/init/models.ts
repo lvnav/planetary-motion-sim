@@ -10,7 +10,9 @@ import { auToPixels } from "../helpers/math";
 import celestialObjectsData from "../models/celestialObjectData";
 import { CelestialObject, distanceDivider } from "../models/celestialObjects";
 
-export function loadModels(scene: Scene): Promise<Renderable>[] {
+export function loadModels(scene: Scene): {
+  celestialObjects: Promise<CelestialObject>[];
+} {
   const loader = new GLTFLoader();
   const celestialObjects = Object.values(celestialObjectsData).map(
     async (celestialObjectData) => {
@@ -46,5 +48,5 @@ export function loadModels(scene: Scene): Promise<Renderable>[] {
       return celestialObject;
     }
   );
-  return celestialObjects;
+  return { celestialObjects };
 }

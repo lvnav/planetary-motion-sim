@@ -1,7 +1,7 @@
 import { Object3D } from "three";
 import { auToPixels } from "../helpers/math";
-import { Coords } from "../interfaces/coords";
-import { CelestialObjectData } from "./celestialObjectData";
+import { type Coords } from "../interfaces/coords";
+import { type CelestialObjectData } from "./celestialObjectData";
 
 export const distanceDivider = 20;
 export const scaleFactor = 50;
@@ -24,7 +24,6 @@ export class CelestialObject implements Renderable {
 
     const { x, y, z } = this.getScale();
     this.model.forEach((modelPart) => {
-      // modelPart.scale.set(x, y, z);
       modelPart.scale.set(1, 1, 1);
       modelPart.position.x = this.getInitialPosition().x;
     });
@@ -52,6 +51,8 @@ export class CelestialObject implements Renderable {
         modelPart.position.x =
           (Math.cos(time / 60 / 60) * auToPixels(this.distanceFromSun)) /
           distanceDivider;
+        // if (this.name === "earth") console.log(this.model[0].position);
+
         modelPart.position.y =
           (Math.sin(time / 60 / 60) * auToPixels(this.distanceFromSun)) /
           distanceDivider;

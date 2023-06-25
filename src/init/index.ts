@@ -44,7 +44,7 @@ function initCamera(): Camera {
   const camera = new PerspectiveCamera(
     40,
     window.innerWidth / window.innerHeight,
-    1,
+    0.1,
     1000000
   );
   camera.position.z = 150;
