@@ -48,7 +48,7 @@ function initCamera(): Camera {
     0.1,
     1000000
   );
-  camera.position.z = 150;
+  camera.position.y = 500;
 
   return camera;
 }
@@ -62,7 +62,7 @@ function initLight(scene: Scene): AmbientLight {
 
 function initGrid(scene: Scene): GridHelper {
   const grid = new GridHelper(500000, 100);
-  grid.rotation.x = degToRad(90);
+  grid.rotation.y = degToRad(90);
   scene.add(grid);
 
   return grid;

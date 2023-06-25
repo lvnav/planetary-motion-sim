@@ -52,7 +52,7 @@ export class CelestialObject implements Renderable {
           (Math.cos(time / 60 / 60) * auToPixels(this.distanceFromSun)) /
           distanceDivider;
 
-        modelPart.position.y =
+        modelPart.position.z =
           (Math.sin(time / 60 / 60) * auToPixels(this.distanceFromSun)) /
           distanceDivider;
       });

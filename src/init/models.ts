@@ -6,7 +6,7 @@ import {
   Scene,
 } from "three";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
-import { auToPixels } from "../helpers/math";
+import { auToPixels, degToRad } from "../helpers/math";
 import celestialObjectsData from "../models/celestialObjectData";
 import { CelestialObject, distanceDivider } from "../models/celestialObjects";
 
@@ -41,6 +41,7 @@ export function loadModels(scene: Scene): {
             )
             .getSpacedPoints(50)
         );
+        geometry.rotateX(degToRad(90));
 
         scene.add(new LineLoop(geometry, material));
       }
