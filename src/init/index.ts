@@ -48,7 +48,7 @@ function initCamera(): Camera {
     0.1,
     1000000
   );
-  camera.position.y = 500;
+  camera.position.y = 2000;
 
   return camera;
 }

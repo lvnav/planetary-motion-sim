@@ -1,14 +1,9 @@
-import {
-  BufferGeometry,
-  LineBasicMaterial,
-  LineLoop,
-  Path,
-  Scene,
-} from "three";
+import { get } from "svelte/store";
+import { Scene } from "three";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
-import { auToPixels, degToRad } from "../helpers/math";
 import celestialObjectsData from "../models/celestialObjectData";
-import { CelestialObject, distanceDivider } from "../models/celestialObjects";
+import { CelestialObject } from "../models/celestialObjects";
+import { distanceDivider, scaleFactor } from "../ui/store";
 
 export function loadModels(scene: Scene): {
   celestialObjects: Promise<CelestialObject>[];
@@ -23,27 +18,15 @@ export function loadModels(scene: Scene): {
       const celestialObject = new CelestialObject({
         ...celestialObjectData,
         model: celestialData.scene.children,
+        scaleFactor: get(scaleFactor),
+        distanceDivider: get(distanceDivider),
       });
 
       scene.add(celestialData.scene);
 
       if (celestialObject.distanceFromSun !== 0) {
-        const material = new LineBasicMaterial({ color: 0x0000ff });
-        const geometry = new BufferGeometry().setFromPoints(
-          new Path()
-            .absarc(
-              0,
-              0,
-              auToPixels(celestialObject.distanceFromSun) / distanceDivider,
-              0,
-              Math.PI * 2,
-              false
-            )
-            .getSpacedPoints(50)
-        );
-        geometry.rotateX(degToRad(90));
-
-        scene.add(new LineLoop(geometry, material));
+        const pathway = celestialObject.buildPathway();
+        scene.add(pathway);
       }
 
       return celestialObject;

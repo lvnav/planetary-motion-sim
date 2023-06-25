@@ -5,7 +5,13 @@ import { loadModels } from "./init/models";
 import type CelestialObject from "./models/celestialObjects";
 import "./style/style.css";
 import loadUi from "./ui";
-import { celestialObjectsStored, simTime, timeStep } from "./ui/store";
+import {
+  celestialObjectsStored,
+  distanceDivider,
+  scaleFactor,
+  simTime,
+  timeStep,
+} from "./ui/store";
 
 async function main() {
   const { renderer, scene, camera } = init();
@@ -33,9 +39,15 @@ async function loop({
 }) {
   const time = get(simTime);
   const step = get(timeStep);
+  const storedDistanceDivider = get(distanceDivider);
+  const storedScaleFactor = get(scaleFactor);
 
-  celestialObjects.forEach(async (model) => {
-    (await model).update(time);
+  celestialObjects.forEach(async (celestialObject) => {
+    (await celestialObject).update({
+      time,
+      distanceDivider: storedDistanceDivider,
+      scaleFactor: storedScaleFactor,
+    });
   });
 
   celestialObjectsStored.update(() => celestialObjects);
