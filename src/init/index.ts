@@ -8,6 +8,7 @@ import {
   WebGLRenderer,
 } from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+import { degToRad } from "../helpers/math";
 
 function init(): {
   renderer: WebGLRenderer;
@@ -60,7 +61,8 @@ function initLight(scene: Scene): AmbientLight {
 }
 
 function initGrid(scene: Scene): GridHelper {
-  const grid = new GridHelper(10000, 10);
+  const grid = new GridHelper(500000, 100);
+  grid.rotation.x = degToRad(90);
   scene.add(grid);
 
   return grid;
