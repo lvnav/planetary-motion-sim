@@ -1,6 +1,6 @@
 import { get } from "svelte/store";
 import { Scene } from "three";
-import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
+import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import celestialObjectsData from "../models/celestialObjectData";
 import { CelestialObject } from "../models/celestialObjects";
 import { distanceDivider, scaleFactor } from "../ui/store";
