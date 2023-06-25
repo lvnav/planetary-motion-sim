@@ -24,7 +24,8 @@ export class CelestialObject implements Renderable {
 
     const { x, y, z } = this.getScale();
     this.model.forEach((modelPart) => {
-      modelPart.scale.set(x, y, z);
+      // modelPart.scale.set(x, y, z);
+      modelPart.scale.set(1, 1, 1);
       modelPart.position.x = this.getInitialPosition().x;
     });
   }
