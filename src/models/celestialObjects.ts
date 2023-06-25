@@ -17,7 +17,6 @@ export class CelestialObject {
   public distanceFromSun: number;
   protected relativeScaleFromSun: number;
   public pathway?: LineLoop;
-  public pathwayHasChanged?: boolean;
   public scaleFactor: number;
   public distanceDivider: number;
   public scale: Coords;
@@ -149,7 +148,6 @@ export class CelestialObject {
   public setDistanceDivider(distanceDivider: number): this {
     this.distanceDivider = distanceDivider;
     this.refreshPathway();
-    this.pathwayHasChanged = true;
 
     return this;
   }
