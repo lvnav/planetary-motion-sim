@@ -6,7 +6,7 @@ import { CelestialObjectData } from "./celestialObjectData";
 export const distanceDivider = 20;
 export const scaleFactor = 50;
 
-export class CelestialObject {
+export class CelestialObject implements Renderable {
   public name: string;
   public modelPath: string;
   public model: Object3D[];

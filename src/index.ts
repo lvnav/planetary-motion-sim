@@ -2,7 +2,6 @@ import { Camera, Scene, WebGLRenderer } from "three";
 import { sinPeriod } from "./helpers/math";
 import init from "./init";
 import { loadModels } from "./init/models";
-import { CelestialObject } from "./models/celestialObjects";
 
 async function main() {
   const { renderer, scene, camera } = init();
@@ -22,7 +21,7 @@ async function loop({
   scene: Scene;
   camera: Camera;
   iterator: number;
-  models: Promise<CelestialObject>[]; // need to be generic who implement update. Not CelestialObject
+  models: Promise<Renderable>[];
 }) {
   models.forEach(async (model) => {
     (await model).update(iterator);
