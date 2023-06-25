@@ -51,7 +51,6 @@ export class CelestialObject implements Renderable {
         modelPart.position.x =
           (Math.cos(time / 60 / 60) * auToPixels(this.distanceFromSun)) /
           distanceDivider;
-        // if (this.name === "earth") console.log(this.model[0].position);
 
         modelPart.position.y =
           (Math.sin(time / 60 / 60) * auToPixels(this.distanceFromSun)) /

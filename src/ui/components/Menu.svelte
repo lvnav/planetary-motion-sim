@@ -1,25 +1,17 @@
 <script lang="ts">
-  import type CelestialObject from "../../models/celestialObjects";
   import { celestialObjectsStored } from "../store";
-
-  let celestialObjects: Promise<CelestialObject>[] = [];
-  const unsubscribe = celestialObjectsStored.subscribe(
-    async (celestialObjectsStored) => {
-      celestialObjects = celestialObjectsStored;
-    }
-  );
+  import Coords from "./Coords.svelte";
 </script>
 
 <menu class="fixed">
-  {#if celestialObjects != null}
-    {#each celestialObjects as celestialObject}
+  {#if $celestialObjectsStored != null}
+    {#each $celestialObjectsStored as celestialObject}
       <li>
         {#await celestialObject}
           <div>Waiting</div>
         {:then celestialObject}
           {celestialObject.name}
-          {celestialObject.distanceFromSun}
-          {celestialObject.model[0].position.x}
+          <Coords coords={celestialObject.model[0].position} />
         {:catch error}
           error: {error}
         {/await}
