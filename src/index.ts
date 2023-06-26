@@ -2,7 +2,7 @@ import { get } from "svelte/store";
 import { Camera, Scene, WebGLRenderer } from "three";
 import init from "./init";
 import { loadModels } from "./init/models";
-import type CelestialObject from "./models/celestialObjects";
+import type CelestialObject from "./models/celestialObject";
 import "./style/style.css";
 import loadUi from "./ui";
 import {
