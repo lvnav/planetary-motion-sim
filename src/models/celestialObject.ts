@@ -5,43 +5,43 @@ import {
   Object3D,
   Path,
 } from "three";
-import { auToPixels, degToRad } from "../helpers/math";
+import { auToM, degToRad } from "../helpers/math";
 import { type Coords } from "../interfaces/coords";
 import { type CelestialObjectData } from "./celestialObjectData";
 
-export class CelestialObject {
+export class CelestialObject implements CelestialObjectData {
   public name: string;
   public modelPath: string;
   public model: Object3D[];
   public rotate?: boolean;
   public distanceFromSun: number;
-  protected relativeScaleFromSun: number;
+  public equatorialRadius: number;
   public pathway?: LineLoop;
-  public scaleFactor: number;
+  public scaleDivider: number;
   public distanceDivider: number;
   public scale: Coords;
 
   public constructor(
     data: CelestialObjectData & {
       model: Object3D[];
-      scaleFactor: number;
+      scaleDivider: number;
       distanceDivider: number;
     }
   ) {
     this.name = data.name;
     this.modelPath = data.modelPath;
-    this.relativeScaleFromSun = data.relativeScaleFromSun;
+    this.equatorialRadius = data.equatorialRadius;
     this.distanceFromSun = data.distanceFromSun;
     this.model = data.model;
     this.rotate = data.rotate;
-    this.scaleFactor = data.scaleFactor;
+    this.scaleDivider = data.scaleDivider;
     this.distanceDivider = data.distanceDivider;
     this.updateScale();
   }
 
   public getInitialPosition(): Coords {
     return {
-      x: auToPixels(this.distanceFromSun) / this.distanceDivider,
+      x: auToM(this.distanceFromSun) / this.distanceDivider,
       y: 0,
       z: 0,
     };
@@ -53,15 +53,19 @@ export class CelestialObject {
 
   public updateScale(): this {
     this.scale = {
-      x: this.relativeScaleFromSun * this.scaleFactor,
-      y: this.relativeScaleFromSun * this.scaleFactor,
-      z: this.relativeScaleFromSun * this.scaleFactor,
+      x: Math.round(this.equatorialRadius / this.scaleDivider),
+      y: Math.round(this.equatorialRadius / this.scaleDivider),
+      z: Math.round(this.equatorialRadius / this.scaleDivider),
     };
 
     const { x, y, z } = this.getScale();
     this.model.forEach((modelPart) => {
       modelPart.scale.set(x, y, z);
-      modelPart.position.x = this.getInitialPosition().x;
+      console.dir({
+        scale: modelPart.scale,
+        pos: modelPart.position,
+        name: this.name,
+      });
     });
 
     return this;
@@ -69,30 +73,30 @@ export class CelestialObject {
 
   public async update({
     time,
-    scaleFactor,
+    scaleDivider,
     distanceDivider,
   }: {
     time: number;
-    scaleFactor: number;
+    scaleDivider: number;
     distanceDivider: number;
   }): Promise<void> {
     if (this.distanceDivider !== distanceDivider) {
       this.setDistanceDivider(distanceDivider);
     }
 
-    if (this.scaleFactor !== scaleFactor) {
-      this.setScaleFactor(scaleFactor);
+    if (this.scaleDivider !== scaleDivider) {
+      this.setScaleDivider(scaleDivider);
       this.updateScale();
     }
 
     if (this.rotate !== false) {
       this.model.forEach((modelPart) => {
         modelPart.position.x =
-          (Math.cos(time / 60 / 60) * auToPixels(this.distanceFromSun)) /
+          (Math.cos(time / 60 / 60) * auToM(this.distanceFromSun)) /
           this.distanceDivider;
 
         modelPart.position.z =
-          (Math.sin(time / 60 / 60) * auToPixels(this.distanceFromSun)) /
+          (Math.sin(time / 60 / 60) * auToM(this.distanceFromSun)) /
           this.distanceDivider;
       });
     }
@@ -105,7 +109,7 @@ export class CelestialObject {
         .absarc(
           0,
           0,
-          auToPixels(this.distanceFromSun) / this.distanceDivider,
+          auToM(this.distanceFromSun) / this.distanceDivider,
           0,
           Math.PI * 2,
           false
@@ -127,7 +131,7 @@ export class CelestialObject {
           .absarc(
             0,
             0,
-            auToPixels(this.distanceFromSun) / this.distanceDivider,
+            auToM(this.distanceFromSun) / this.distanceDivider,
             0,
             Math.PI * 2,
             false
@@ -139,8 +143,8 @@ export class CelestialObject {
     }
   }
 
-  public setScaleFactor(scaleFactor: number): this {
-    this.scaleFactor = scaleFactor;
+  public setScaleDivider(scaleDivider: number): this {
+    this.scaleDivider = scaleDivider;
 
     return this;
   }

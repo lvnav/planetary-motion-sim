@@ -8,7 +8,7 @@ import loadUi from "./ui";
 import {
   celestialObjectsStored,
   distanceDivider,
-  scaleFactor,
+  scaleDivider,
   simTime,
   timeStep,
 } from "./ui/store";
@@ -40,13 +40,13 @@ async function loop({
   const time = get(simTime);
   const step = get(timeStep);
   const storedDistanceDivider = get(distanceDivider);
-  const storedScaleFactor = get(scaleFactor);
+  const storedScaleDivider = get(scaleDivider);
 
   celestialObjects.forEach(async (celestialObject) => {
     (await celestialObject).update({
       time,
       distanceDivider: storedDistanceDivider,
-      scaleFactor: storedScaleFactor,
+      scaleDivider: storedScaleDivider,
     });
   });
 

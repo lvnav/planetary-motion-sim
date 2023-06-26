@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { distanceDivider, scaleFactor } from "../store";
+  import { distanceDivider, scaleDivider } from "../store";
 
   const onDistanceDividerChange = (event: Event) => {
     if (!(event.target instanceof HTMLInputElement)) {
@@ -15,14 +15,14 @@
     );
   };
 
-  const onScaleFactorChange = (event: Event) => {
+  const onScaleDividerChange = (event: Event) => {
     if (!(event.target instanceof HTMLInputElement)) {
       throw new Error("target isn't an input");
     }
 
     const newValue = parseInt(event.target.value);
 
-    scaleFactor.set(
+    scaleDivider.set(
       isNaN(newValue) || newValue === 0 || event.target.value === ""
         ? 1
         : newValue
@@ -43,11 +43,11 @@
   </div>
   <div>
     <label class="flex">
-      Scale Factor:
+      Scale divider:
       <input
         class="flex-1"
-        bind:value={$scaleFactor}
-        on:input={onScaleFactorChange}
+        bind:value={$scaleDivider}
+        on:input={onScaleDividerChange}
       />
     </label>
   </div>
