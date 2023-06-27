@@ -9,6 +9,7 @@ import {
 } from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { degToRad } from "../helpers/math";
+const MAX_VIEW = 1000000000;
 
 function init(): {
   renderer: WebGLRenderer;
@@ -46,7 +47,7 @@ function initCamera(): Camera {
     40,
     window.innerWidth / window.innerHeight,
     0.1,
-    1000000
+    MAX_VIEW
   );
 
   camera.position.y = 7000;
@@ -62,7 +63,7 @@ function initLight(scene: Scene): AmbientLight {
 }
 
 function initGrid(scene: Scene): GridHelper {
-  const grid = new GridHelper(500000, 100);
+  const grid = new GridHelper(MAX_VIEW * 2, 10);
   grid.rotation.y = degToRad(90);
   scene.add(grid);
 

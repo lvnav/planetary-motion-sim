@@ -71,11 +71,6 @@ async function loop({
       y: 0,
       z: 0,
     });
-    // const font = await loadFont();
-
-    // const material = new MeshBasicMaterial({ color: "red" });
-    // const mesh = new Mesh(font, material);
-    // scene.add(mesh);
 
     lines.push(line);
     scene.add(line);
