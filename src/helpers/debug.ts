@@ -1,5 +1,5 @@
 import { Box3, Object3D } from "three";
-import { Coords } from "../interfaces/coords";
+import { type Coords } from "../interfaces/coords";
 
 export function getObjectDimensions(object: Object3D): Coords {
   const meshBounds = new Box3().setFromObject(object);

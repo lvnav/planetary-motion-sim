@@ -18,3 +18,5 @@ export function drawLine(from: Coords, to: Coords): Line {
 
   return new Line(geometry, material);
 }
+
+export function drawText(string: string) {}

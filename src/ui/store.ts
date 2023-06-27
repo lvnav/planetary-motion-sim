@@ -1,6 +1,6 @@
 import { writable } from "svelte/store";
 import { sinPeriod } from "../helpers/math";
-import CelestialObject from "../models/celestialObject";
+import type CelestialObject from "../objects/CelestialObject";
 
 export const celestialObjectsStored =
   writable<Promise<CelestialObject>[]>(null);
