@@ -1,8 +1,15 @@
-import { LineLoop, Object3D } from "three";
+import { Object3D, Scene } from "three";
 import { auToM } from "../helpers/math";
 import { type Coords } from "../interfaces/coords";
 import type { Updatable, UpdatableOptions } from "../interfaces/updatable";
 import { type CelestialObjectData } from "./celestialObjectData";
+
+export type CelestialObjectOptions = CelestialObjectData & {
+  model: Object3D[];
+  scaleDivider: number;
+  distanceDivider: number;
+  scene: Scene;
+};
 
 export class CelestialObject
   implements Omit<CelestialObjectData, "defaultModel">, Updatable
@@ -13,26 +20,20 @@ export class CelestialObject
   public rotate?: boolean;
   public distanceFromCenter: number;
   public equatorialRadius: number;
-  public pathway?: LineLoop;
   public scaleDivider: number;
   public distanceDivider: number;
   public scale: Coords;
+  public scene: Scene;
 
-  public constructor(
-    data: CelestialObjectData & {
-      model: Object3D[];
-      scaleDivider: number;
-      distanceDivider: number;
-    }
-  ) {
-    this.name = data.name;
-    this.modelPath = data.modelPath;
-    this.equatorialRadius = data.equatorialRadius;
-    this.distanceFromCenter = data.distanceFromCenter;
-    this.model = data.model;
-    this.scaleDivider = data.scaleDivider;
-    this.distanceDivider = data.distanceDivider;
-    this.updateScale();
+  public constructor(options: CelestialObjectOptions) {
+    this.name = options.name;
+    this.modelPath = options.modelPath;
+    this.equatorialRadius = options.equatorialRadius;
+    this.distanceFromCenter = options.distanceFromCenter;
+    this.model = options.model;
+    this.scaleDivider = options.scaleDivider;
+    this.distanceDivider = options.distanceDivider;
+    this.scene = options.scene;
   }
 
   public getInitialPosition(): Coords {

@@ -19,6 +19,7 @@ export function loadObjects(scene: Scene): {
           model: celestialData.scene.children,
           scaleDivider: 1,
           distanceDivider: 1,
+          scene,
         });
 
       scene.add(celestialData.scene);

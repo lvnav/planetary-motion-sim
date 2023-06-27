@@ -10,10 +10,18 @@ import { auToM, degToRad } from "../helpers/math";
 import type { Movable } from "../interfaces/movable";
 import type { Trackable } from "../interfaces/trackable";
 import type { UpdatableOptions } from "../interfaces/updatable";
-import CelestialObject from "./CelestialObject";
+import CelestialObject, {
+  type CelestialObjectOptions,
+} from "./CelestialObject";
 
 class Planet extends CelestialObject implements Movable, Trackable {
   private oldTrace = undefined;
+  public pathway?: LineLoop;
+
+  public constructor(options: CelestialObjectOptions) {
+    super(options);
+    this.scene.add(this.buildPathway());
+  }
 
   public async update(options: UpdatableOptions): Promise<void> {
     super.update(options);
@@ -58,22 +66,20 @@ class Planet extends CelestialObject implements Movable, Trackable {
   }
 
   public refreshPathway() {
-    if (this.pathway !== undefined) {
-      this.pathway.geometry.setFromPoints(
-        new Path()
-          .absarc(
-            0,
-            0,
-            auToM(this.distanceFromCenter) / this.distanceDivider,
-            0,
-            Math.PI * 2,
-            false
-          )
-          .getSpacedPoints(50)
-      );
-      this.pathway.geometry.rotateX(degToRad(90));
-      this.pathway.geometry.attributes.position.needsUpdate = true;
-    }
+    this.pathway.geometry.setFromPoints(
+      new Path()
+        .absarc(
+          0,
+          0,
+          auToM(this.distanceFromCenter) / this.distanceDivider,
+          0,
+          Math.PI * 2,
+          false
+        )
+        .getSpacedPoints(50)
+    );
+    this.pathway.geometry.rotateX(degToRad(90));
+    this.pathway.geometry.attributes.position.needsUpdate = true;
   }
 
   public setDistanceDivider(distanceDivider: number): this {
