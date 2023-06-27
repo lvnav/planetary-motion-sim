@@ -1,7 +1,7 @@
 import type { Scene } from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import CelestialObject from "../objects/CelestialObject";
-import celestialObjectsData from "../objects/celestialObjectData";
+import celestialObjectsData from "../objects/celestialObjectsData";
 
 export function loadObjects(scene: Scene): {
   celestialObjects: Promise<CelestialObject>[];

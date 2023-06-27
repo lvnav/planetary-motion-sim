@@ -2,7 +2,7 @@ import { Object3D, Scene } from "three";
 import { auToM } from "../helpers/math";
 import { type Coords } from "../interfaces/coords";
 import type { Updatable, UpdatableOptions } from "../interfaces/updatable";
-import { type CelestialObjectData } from "./celestialObjectData";
+import { type CelestialObjectData } from "./celestialObjectsData";
 
 export type CelestialObjectOptions = CelestialObjectData & {
   model: Object3D[];

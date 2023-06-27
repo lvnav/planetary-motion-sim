@@ -18,6 +18,6 @@ export function hexToRgb(hex: string): Rgb {
   };
 }
 
-export function rgbToHex({ r, g, b }: Rgb) {
+export function rgbToHex({ r, g, b }: Rgb): string {
   return "#" + ((1 << 24) | (r << 16) | (g << 8) | b).toString(16).slice(1);
 }
