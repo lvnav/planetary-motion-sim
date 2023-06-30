@@ -17,7 +17,6 @@ export class CelestialObject
   public name: string;
   public modelPath: string;
   public model: Object3D[];
-  public rotate?: boolean;
   public distanceFromCenter: number;
   public equatorialRadius: number;
   public scaleDivider: number;

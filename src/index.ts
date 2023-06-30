@@ -2,7 +2,7 @@ import { get } from "svelte/store";
 import { Camera, Scene, WebGLRenderer } from "three";
 import init from "./init";
 import { loadObjects } from "./init/objects";
-import Circle from "./models/Circle";
+import Pythagorean from "./models/Pythagorean";
 import "./style/style.css";
 import loadUi from "./ui";
 import {
@@ -19,7 +19,10 @@ async function main() {
 
   loadUi();
 
-  const model = new Circle(celestialObjects);
+  const model = new Pythagorean(celestialObjects);
+  console.log(model.objects);
+
+  // const model = new Circle(celestialObjects);
   // const font = await loadFont();
 
   // const material = new MeshBasicMaterial({ color: "red" });
@@ -43,7 +46,7 @@ async function loop({
   renderer: WebGLRenderer;
   scene: Scene;
   camera: Camera;
-  model: Circle;
+  model: Pythagorean;
 }) {
   const time = get(simTime);
   const step = get(timeStep);

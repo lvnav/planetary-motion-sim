@@ -1,8 +1,11 @@
 import {
+  BufferAttribute,
   BufferGeometry,
   LineBasicMaterial,
   LineLoop,
   Path,
+  Points,
+  PointsMaterial,
   Scene,
 } from "three";
 import { drawLine } from "../helpers/draw";
@@ -27,20 +30,37 @@ class Planet extends CelestialObject implements Movable, Trackable {
     super.update(options);
     this.move(options.time);
     this.trace(options.scene);
+
+    const dotGeometry = new BufferGeometry();
+    dotGeometry.setAttribute(
+      "position",
+      new BufferAttribute(new Float32Array(this.model[0].position.toArray()), 3)
+    );
+    const dotMaterial = new PointsMaterial({ size: 100, color: 0x0000ff });
+    const dot = new Points(dotGeometry, dotMaterial);
+    options.scene.add(dot);
+  }
+
+  public moveX(time: number) {
+    return (
+      (Math.cos(time / 60 / 60) * auToM(this.distanceFromCenter)) /
+      this.distanceDivider
+    );
+  }
+
+  public moveY(time: number) {
+    return (
+      (Math.sin(time / 60 / 60) * auToM(this.distanceFromCenter)) /
+      this.distanceDivider
+    );
   }
 
   public move(time: number) {
-    if (this.rotate !== false) {
-      this.model.forEach((modelPart) => {
-        modelPart.position.x =
-          (Math.cos(time / 60 / 60) * auToM(this.distanceFromCenter)) /
-          this.distanceDivider;
+    this.model.forEach((modelPart) => {
+      modelPart.position.x = this.moveX(time) + 500000;
 
-        modelPart.position.z =
-          (Math.sin(time / 60 / 60) * auToM(this.distanceFromCenter)) /
-          this.distanceDivider;
-      });
-    }
+      modelPart.position.z = this.moveY(time) + 500000;
+    });
   }
 
   public buildPathway(): LineLoop {
