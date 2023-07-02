@@ -11,7 +11,7 @@
           <div>Waiting</div>
         {:then celestialObject}
           {celestialObject.name}
-          <Coords coords={celestialObject.model[0].position} />
+          <Coords coords={celestialObject.getCelestialObjectModel().position} />
         {:catch error}
           error: {error}
         {/await}

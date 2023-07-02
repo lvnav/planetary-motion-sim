@@ -5,10 +5,9 @@ class Pythagorean implements Updatable {
   public objects: Promise<CelestialObject>[];
 
   public constructor(data: Promise<CelestialObject>[]) {
-    this.objects = data;
     this.objects = data
       .filter(async (celestialObject) =>
-        ["earth", "venus"].includes((await celestialObject).name)
+        ["earth"].includes((await celestialObject).name)
       )
       .map(async (celestialObject) => {
         if ((await celestialObject).name === "earth") {
@@ -28,6 +27,7 @@ class Pythagorean implements Updatable {
     distanceDivider,
     scaleDivider,
     scene,
+    timeStep,
   }: UpdatableOptions) {
     this.objects.forEach(async (object) => {
       (await object).update({
@@ -35,6 +35,7 @@ class Pythagorean implements Updatable {
         distanceDivider: distanceDivider,
         scaleDivider: scaleDivider,
         scene,
+        timeStep,
       });
     });
   }

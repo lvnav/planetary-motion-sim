@@ -8,7 +8,7 @@ import {
 import type { Coords } from "../interfaces/coords";
 
 export function drawLine(from: Coords, to: Coords): Line {
-  const material = new LineBasicMaterial({ color: 0x0000ff });
+  const material = new LineBasicMaterial({ color: 0x800080 });
   const geometry = new BufferGeometry().setFromPoints(
     new LineCurve3(
       new Vector3(from.x, from.y, from.z),
@@ -18,5 +18,3 @@ export function drawLine(from: Coords, to: Coords): Line {
 
   return new Line(geometry, material);
 }
-
-export function drawText(string: string) {}

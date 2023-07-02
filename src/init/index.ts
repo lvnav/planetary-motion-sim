@@ -1,5 +1,6 @@
 import {
   AmbientLight,
+  AxesHelper,
   Camera,
   Color,
   GridHelper,
@@ -22,6 +23,8 @@ function init(): {
   const hlight = initLight(scene);
   const grid = initGrid(scene);
   const controls = initControls(camera, renderer);
+  const axesHelper = new AxesHelper(1000000000000);
+  scene.add(axesHelper);
 
   return { renderer, scene, camera };
 }

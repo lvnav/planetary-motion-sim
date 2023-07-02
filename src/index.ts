@@ -1,5 +1,5 @@
 import { get } from "svelte/store";
-import { Camera, Scene, WebGLRenderer } from "three";
+import { AxesHelper, Camera, Scene, WebGLRenderer } from "three";
 import init from "./init";
 import { loadObjects } from "./init/objects";
 import Pythagorean from "./models/Pythagorean";
@@ -12,6 +12,7 @@ import {
   simTime,
   timeStep,
 } from "./ui/store";
+import Circle from "./models/Circle";
 
 async function main() {
   const { renderer, scene, camera } = init();
@@ -19,8 +20,7 @@ async function main() {
 
   loadUi();
 
-  const model = new Pythagorean(celestialObjects);
-  console.log(model.objects);
+  const model = new Circle(celestialObjects);
 
   // const model = new Circle(celestialObjects);
   // const font = await loadFont();
@@ -58,6 +58,7 @@ async function loop({
     distanceDivider: storedDistanceDivider,
     scaleDivider: storedScaleDivider,
     scene,
+    timeStep: step,
   });
 
   celestialObjectsStored.update(() => model.objects);

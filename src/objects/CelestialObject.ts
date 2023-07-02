@@ -1,8 +1,9 @@
-import { Object3D, Scene } from "three";
+import { Group, Object3D, Scene } from "three";
 import { auToM } from "../helpers/math";
 import { type Coords } from "../interfaces/coords";
 import type { Updatable, UpdatableOptions } from "../interfaces/updatable";
 import { type CelestialObjectData } from "./celestialObjectsData";
+import { getObjectDimensions } from "../helpers/debug";
 
 export type CelestialObjectOptions = CelestialObjectData & {
   model: Object3D[];
@@ -11,28 +12,29 @@ export type CelestialObjectOptions = CelestialObjectData & {
   scene: Scene;
 };
 
-export class CelestialObject
+export abstract class CelestialObject
   implements Omit<CelestialObjectData, "defaultModel">, Updatable
 {
   public name: string;
   public modelPath: string;
-  public model: Object3D[];
+  public model: Group;
   public distanceFromCenter: number;
   public equatorialRadius: number;
   public scaleDivider: number;
   public distanceDivider: number;
   public scale: Coords;
   public scene: Scene;
+  public obliquity: number | null;
 
   public constructor(options: CelestialObjectOptions) {
     this.name = options.name;
     this.modelPath = options.modelPath;
     this.equatorialRadius = options.equatorialRadius;
     this.distanceFromCenter = options.distanceFromCenter;
-    this.model = options.model;
     this.scaleDivider = options.scaleDivider;
     this.distanceDivider = options.distanceDivider;
     this.scene = options.scene;
+    this.obliquity = options.obliquity;
   }
 
   public getInitialPosition(): Coords {
@@ -55,7 +57,7 @@ export class CelestialObject
     };
 
     const { x, y, z } = this.getScale();
-    this.model.forEach((modelPart) => {
+    this.model.children.forEach((modelPart) => {
       modelPart.scale.set(x, y, z);
     });
 
@@ -63,14 +65,12 @@ export class CelestialObject
   }
 
   public async update({
-    time,
     scaleDivider,
     distanceDivider,
   }: UpdatableOptions): Promise<void> {
     if (this.distanceDivider !== distanceDivider) {
       this.setDistanceDivider(distanceDivider);
     }
-
     if (this.scaleDivider !== scaleDivider) {
       this.setScaleDivider(scaleDivider);
       this.updateScale();

@@ -5,6 +5,7 @@ export interface UpdatableOptions {
   scaleDivider: number;
   distanceDivider: number;
   scene: Scene;
+  timeStep: number;
 }
 
 export interface Updatable {
