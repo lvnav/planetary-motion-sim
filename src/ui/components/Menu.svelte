@@ -1,5 +1,6 @@
 <script lang="ts">
   import { findHypotenuse, mToAu, radToDeg } from "../../helpers/math";
+  import { isPlanet } from "../../helpers/type";
   import { celestialObjectsStored, distanceDivider } from "../store";
 </script>
 
@@ -10,7 +11,7 @@
         {#await celestialObject}
           <div>Waiting</div>
         {:then celestialObject}
-          {#if celestialObject.name !== "sun"}
+          {#if isPlanet(celestialObject)}
             <span>
               {celestialObject.name}
             </span>

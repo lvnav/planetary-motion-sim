@@ -24,6 +24,7 @@ export class CelestialObject
   public distanceDivider: number;
   public scale: Coords;
   public scene: Scene;
+  public type: undefined | string;
 
   public constructor(options: CelestialObjectOptions) {
     this.name = options.name;

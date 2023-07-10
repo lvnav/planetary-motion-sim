@@ -17,8 +17,9 @@ import CelestialObject, {
 class Planet extends CelestialObject implements Movable, Trackable {
   private oldTrace = undefined;
   public pathway?: LineLoop;
-  private linearSpeed: number = 0;
-  private angularSpeed: number = 0;
+  public linearSpeed: number = 0;
+  public angularSpeed: number = 0;
+  public type = "planet";
 
   public constructor(options: CelestialObjectOptions) {
     super(options);
