@@ -20,11 +20,6 @@ async function main() {
   loadUi();
 
   const model = new Circle(celestialObjects);
-  // const font = await loadFont();
-
-  // const material = new MeshBasicMaterial({ color: "red" });
-  // const mesh = new Mesh(font, material);
-  // scene.add(mesh);
 
   loop({
     renderer,
