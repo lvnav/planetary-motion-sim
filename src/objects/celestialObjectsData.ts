@@ -8,6 +8,8 @@ export interface CelestialObjectData {
   equatorialRadius: number; // km
   distanceFromCenter: number; // au
   defaultModel: typeof CelestialObject;
+  semiMajorAxis?: number; // km
+  eccentricity?: number; // km
 }
 
 const celestialObjectsData = [
@@ -17,6 +19,8 @@ const celestialObjectsData = [
     distanceFromCenter: 0,
     equatorialRadius: 695700,
     defaultModel: Star,
+    semiMajorAxis: 149597887.5, // of earth,
+    eccentricity: 0.01671022, // of earth,
   },
   // {
   //   name: "mercury",
@@ -38,6 +42,8 @@ const celestialObjectsData = [
     distanceFromCenter: 1,
     equatorialRadius: 6371,
     defaultModel: Planet,
+    semiMajorAxis: 149597887.5,
+    eccentricity: 0.01671022,
   },
   // {
   //   name: "mars",

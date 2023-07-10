@@ -1,7 +1,8 @@
 import {
   BufferGeometry,
+  EllipseCurve,
+  Line,
   LineBasicMaterial,
-  LineLoop,
   Path,
   Scene,
 } from "three";
@@ -16,7 +17,7 @@ import CelestialObject, {
 
 class Planet extends CelestialObject implements Movable, Trackable {
   private oldTrace = undefined;
-  public pathway?: LineLoop;
+  public pathway?: Line;
   public linearSpeed: number = 0;
   public angularSpeed: number = 0;
   public type = "planet";
@@ -24,6 +25,10 @@ class Planet extends CelestialObject implements Movable, Trackable {
   public constructor(options: CelestialObjectOptions) {
     super(options);
     this.scene.add(this.buildPathway());
+    this.eccentricity = options.eccentricity;
+    this.semiMajorAxis = options.semiMajorAxis * 1000;
+    this.semiMinorAxis =
+      this.semiMajorAxis * Math.sqrt(1 - this.eccentricity ** 2);
   }
 
   public async update(options: UpdatableOptions): Promise<void> {
@@ -37,35 +42,30 @@ class Planet extends CelestialObject implements Movable, Trackable {
   public move(time: number) {
     this.model.forEach((modelPart) => {
       modelPart.position.x =
-        (Math.cos(time / 60 / 60) * auToM(this.distanceFromCenter)) /
-        this.distanceDivider;
+        (Math.cos(time / 60 / 60) * this.semiMajorAxis) / this.distanceDivider;
 
       modelPart.position.z =
-        (Math.sin(time / 60 / 60) * auToM(this.distanceFromCenter)) /
-        this.distanceDivider;
+        (Math.sin(time / 60 / 60) * this.semiMinorAxis) / this.distanceDivider;
     });
   }
 
-  public buildPathway(): LineLoop {
-    const material = new LineBasicMaterial({ color: 0x0000ff });
-    const geometry = new BufferGeometry().setFromPoints(
-      new Path()
-        .absarc(
-          0,
-          0,
-          auToM(this.distanceFromCenter) / this.distanceDivider,
-          0,
-          Math.PI * 2,
-          false
-        )
-        .getSpacedPoints(50)
+  public buildPathway(): Line {
+    const curve = new EllipseCurve(
+      0,
+      0,
+      this.semiMajorAxis,
+      this.semiMinorAxis
     );
-    geometry.rotateX(degToRad(90));
 
-    const pathway = new LineLoop(geometry, material);
-    this.pathway = pathway;
+    const points = curve.getPoints(1000000);
+    const geometry = new BufferGeometry().setFromPoints(points);
 
-    return pathway;
+    const material = new LineBasicMaterial({ color: 0xff0000 });
+
+    const ellipse = new Line(geometry, material);
+    this.pathway = ellipse;
+
+    return ellipse;
   }
 
   public refreshPathway() {

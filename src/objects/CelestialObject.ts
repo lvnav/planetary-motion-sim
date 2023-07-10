@@ -25,6 +25,9 @@ export class CelestialObject
   public scale: Coords;
   public scene: Scene;
   public type: undefined | string;
+  public eccentricity?: number = undefined;
+  public semiMajorAxis?: number = undefined;
+  public semiMinorAxis?: number = undefined;
 
   public constructor(options: CelestialObjectOptions) {
     this.name = options.name;
