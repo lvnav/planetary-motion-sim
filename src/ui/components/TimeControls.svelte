@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { sinPeriod } from "../../helpers/math";
   import { simTime, timeStep } from "../store";
 
   let pausedTimeStep = null;
@@ -9,21 +8,21 @@
   <div>
     <button
       on:click={() => {
-        timeStep.set(-sinPeriod() * 5);
+        timeStep.set(-1 * 5);
       }}
     >
       &lt;&lt;
     </button>
     <button
       on:click={() => {
-        timeStep.set(-sinPeriod() * 2);
+        timeStep.set(-1 * 2);
       }}
     >
       &lt;
     </button>
     <button
       on:click={() => {
-        timeStep.set(pausedTimeStep !== null ? pausedTimeStep : sinPeriod());
+        timeStep.set(pausedTimeStep !== null ? pausedTimeStep : 1);
       }}>play</button
     >
     <button
@@ -37,21 +36,21 @@
     <button
       on:click={() => {
         simTime.set(0);
-        timeStep.set(sinPeriod());
+        timeStep.set(1);
       }}
     >
       reset
     </button>
     <button
       on:click={() => {
-        timeStep.set(sinPeriod() * 2);
+        timeStep.set(1 * 2);
       }}
     >
       &gt;
     </button>
     <button
       on:click={() => {
-        timeStep.set(sinPeriod() * 5);
+        timeStep.set(1 * 5);
       }}
     >
       &gt;&gt;

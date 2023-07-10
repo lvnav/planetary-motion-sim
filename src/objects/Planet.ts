@@ -17,6 +17,8 @@ import CelestialObject, {
 class Planet extends CelestialObject implements Movable, Trackable {
   private oldTrace = undefined;
   public pathway?: LineLoop;
+  private linearSpeed: number = 0;
+  private angularSpeed: number = 0;
 
   public constructor(options: CelestialObjectOptions) {
     super(options);
@@ -27,20 +29,20 @@ class Planet extends CelestialObject implements Movable, Trackable {
     super.update(options);
     this.move(options.time);
     this.trace(options.scene);
+    this.setAngularSpeed(options.time);
+    this.setLinearSpeed();
   }
 
   public move(time: number) {
-    if (this.rotate !== false) {
-      this.model.forEach((modelPart) => {
-        modelPart.position.x =
-          (Math.cos(time / 60 / 60) * auToM(this.distanceFromCenter)) /
-          this.distanceDivider;
+    this.model.forEach((modelPart) => {
+      modelPart.position.x =
+        (Math.cos(time / 60 / 60) * auToM(this.distanceFromCenter)) /
+        this.distanceDivider;
 
-        modelPart.position.z =
-          (Math.sin(time / 60 / 60) * auToM(this.distanceFromCenter)) /
-          this.distanceDivider;
-      });
-    }
+      modelPart.position.z =
+        (Math.sin(time / 60 / 60) * auToM(this.distanceFromCenter)) /
+        this.distanceDivider;
+    });
   }
 
   public buildPathway(): LineLoop {
@@ -103,6 +105,15 @@ class Planet extends CelestialObject implements Movable, Trackable {
     scene.add(trace);
 
     this.oldTrace = trace;
+  }
+
+  public setAngularSpeed(time: number) {
+    const theta = time / 60 / 60;
+    this.angularSpeed = theta / time;
+  }
+
+  public setLinearSpeed() {
+    this.linearSpeed = this.angularSpeed * this.equatorialRadius;
   }
 }
 
